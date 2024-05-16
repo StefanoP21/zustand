@@ -33,9 +33,9 @@ export const BlackBearsCard = () => {
       <h2>Osos Negros</h2>
 
       <div className="flex flex-col md:flex-row">
-        <button onClick={() => changeBlackPopulationBy(+1)}> +1</button>
-        <span className="text-3xl mx-2 lg:mx-10"> {blackBears} </span>
         <button onClick={() => changeBlackPopulationBy(-1)}>-1</button>
+        <span className="text-3xl mx-2 lg:mx-10"> {blackBears} </span>
+        <button onClick={() => changeBlackPopulationBy(+1)}>+1</button>
       </div>
     </WhiteCard>
   );
@@ -52,9 +52,9 @@ export const PolarBearsCard = () => {
       <h2>Osos Polares</h2>
 
       <div className="flex flex-col md:flex-row">
-        <button onClick={() => changePolarPopulationBy(+1)}> +1</button>
-        <span className="text-3xl mx-2 lg:mx-10"> {polarBears} </span>
         <button onClick={() => changePolarPopulationBy(-1)}>-1</button>
+        <span className="text-3xl mx-2 lg:mx-10"> {polarBears} </span>
+        <button onClick={() => changePolarPopulationBy(+1)}>+1</button>
       </div>
     </WhiteCard>
   );
@@ -71,9 +71,9 @@ export const PandaBearsCard = () => {
       <h2>Osos Pandas</h2>
 
       <div className="flex flex-col md:flex-row">
-        <button onClick={() => changePandaPopulationBy(+1)}> +1</button>
-        <span className="text-3xl mx-2 lg:mx-10"> {pandaBears} </span>
         <button onClick={() => changePandaPopulationBy(-1)}>-1</button>
+        <span className="text-3xl mx-2 lg:mx-10"> {pandaBears} </span>
+        <button onClick={() => changePandaPopulationBy(+1)}>+1</button>
       </div>
     </WhiteCard>
   );
