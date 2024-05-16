@@ -2,15 +2,22 @@ import { create } from 'zustand';
 
 interface BearState {
   blackBears: number;
-  pandaBears: number;
   polarBears: number;
-  increaseBlackPopulationBy: (by: number) => void;
+  pandaBears: number;
+  changeBlackPopulationBy: (by: number) => void;
+  changePolarPopulationBy: (by: number) => void;
+  changePandaPopulationBy: (by: number) => void;
 }
 
-const useBearStore = create<BearState>()((set) => ({
+export const useBearStore = create<BearState>()((set) => ({
   blackBears: 10,
   pandaBears: 5,
   polarBears: 0,
-  increaseBlackPopulationBy: (by: number) =>
+
+  changeBlackPopulationBy: (by: number) =>
     set((state) => ({ blackBears: state.blackBears + by })),
+  changePolarPopulationBy: (by: number) =>
+    set((state) => ({ polarBears: state.polarBears + by })),
+  changePandaPopulationBy: (by: number) =>
+    set((state) => ({ pandaBears: state.pandaBears + by })),
 }));
