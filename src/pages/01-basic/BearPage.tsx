@@ -84,17 +84,27 @@ export const BearsDisplay = () => {
   // const doNothing = useBearStore((state) => state.doNothing);
   //* useShallow is used to avoid unnecessary re-renders
   const doNothing = useBearStore(useShallow((state) => state.doNothing));
+  const addBear = useBearStore((state) => state.addBear);
+  const clearBears = useBearStore((state) => state.clearBears);
 
   return (
     <WhiteCard>
       <h1>Osos</h1>
 
+      <button className="mt-2" onClick={addBear}>
+        Add bears
+      </button>
+      <button className="mt-2" onClick={clearBears}>
+        Clears bears
+      </button>
+
       {bears.map((bear) => (
-        <div key={bear.id} className="flex justify-between">
+        <div key={bear.id} className="flex justify-between mt-4">
           <span>{bear.name}</span>
           <button onClick={doNothing}>Do Nothing</button>
         </div>
       ))}
+
       {/* <pre>{JSON.stringify(bears, null, 2)}</pre> */}
     </WhiteCard>
   );
