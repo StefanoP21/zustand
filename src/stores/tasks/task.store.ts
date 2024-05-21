@@ -1,11 +1,13 @@
 import { create, StateCreator } from 'zustand';
-import { Task } from '../../interfaces';
+import { Task, TaskStatus } from '../../interfaces';
 
 interface TaskState {
   tasks: Record<string, Task>; // {[key: string]: Task }
+
+  getTaskByStatus: (status: TaskStatus) => Task[];
 }
 
-const storeApi: StateCreator<TaskState> = (set) => ({
+const storeApi: StateCreator<TaskState> = (set, get) => ({
   tasks: {
     '1': {
       id: '1',
@@ -22,6 +24,10 @@ const storeApi: StateCreator<TaskState> = (set) => ({
       title: 'Task 3',
       status: 'done',
     },
+  },
+
+  getTaskByStatus: (status: TaskStatus) => {
+    return Object.values(get().tasks).filter((task) => task.status === status);
   },
 });
 
