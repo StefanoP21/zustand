@@ -11,18 +11,18 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   tasks: {
     '1': {
       id: '1',
-      title: 'Task 1',
+      title: 'Open Task 1',
       status: 'open',
     },
     '2': {
       id: '2',
-      title: 'Task 2',
+      title: 'In Progress Task 1',
       status: 'in-progress',
     },
     '3': {
       id: '3',
-      title: 'Task 3',
-      status: 'done',
+      title: 'Open Task 2',
+      status: 'open',
     },
   },
 
