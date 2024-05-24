@@ -1,10 +1,11 @@
 import { create, StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 import { v4 as uuidv4 } from 'uuid';
 import { produce } from 'immer';
 
-import { Task, TaskStatus } from '../../interfaces';
+import type { Task, TaskStatus } from '../../interfaces';
 
 interface TaskState {
   tasks: Record<string, Task>; // {[key: string]: Task }
@@ -19,10 +20,10 @@ interface TaskState {
   onTaskDrop: (status: TaskStatus) => void;
 }
 
-const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
-  set,
-  get
-) => ({
+const storeApi: StateCreator<
+  TaskState,
+  [['zustand/devtools', never], ['zustand/immer', never]]
+> = (set, get) => ({
   tasks: {
     '1': {
       id: '1',
@@ -48,14 +49,20 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
   addTask(title, status) {
     const newTask: Task = { id: uuidv4(), title, status: status };
 
-    set(
-      produce((state: TaskState) => {
-        state.tasks[newTask.id] = newTask;
-      }),
-      false,
-      'addTask'
-    );
+    set((state) => {
+      state.tasks[newTask.id] = newTask;
+    });
 
+    //* Using immer
+    // set(
+    //   produce((state: TaskState) => {
+    //     state.tasks[newTask.id] = newTask;
+    //   }),
+    //   false,
+    //   'addTask'
+    // );
+
+    //* Using normal function
     // set(
     //   (state) => ({
     //     tasks: {
@@ -77,18 +84,31 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
   },
 
   changeTaskStatus(taskId, status) {
-    const task = get().tasks[taskId];
-    console.log(task);
-    task.status = status;
+    //* Read-only object
+    // const task = get().tasks[taskId];
+    //* Mutable object
+    // const task = { ...get().tasks[taskId] };
+    // task.status = status;
 
-    set(
-      produce((state: TaskState) => {
-        state.tasks[taskId] = task;
-      }),
-      false,
-      'changeTaskStatus'
-    );
+    set((state) => {
+      state.tasks[taskId] = {
+        //* Alternative to mutable object
+        // ...task,
+        ...state.tasks[taskId],
+        status,
+      };
+    });
 
+    //* Using immer
+    // set(
+    //   produce((state: TaskState) => {
+    //     state.tasks[taskId] = task;
+    //   }),
+    //   false,
+    //   'changeTaskStatus'
+    // );
+
+    //* Using normal function
     // set(
     //   (state) => ({
     //     tasks: {
@@ -110,4 +130,4 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
   },
 });
 
-export const useTaskStore = create<TaskState>()(devtools(storeApi));
+export const useTaskStore = create<TaskState>()(devtools(immer(storeApi)));
