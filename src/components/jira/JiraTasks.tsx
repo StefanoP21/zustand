@@ -1,4 +1,4 @@
-import { DragEvent } from 'react';
+import { DragEvent, useState } from 'react';
 import {
   IoCheckmarkCircleOutline,
   IoEllipsisHorizontalOutline,
@@ -18,18 +18,21 @@ interface Props {
 
 export const JiraTasks = ({ title, value, tasks }: Props) => {
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const [onDragOver, setOnDragOver] = useState(false);
 
-  const handleDragOver = (event: DragEvent<HTMLElement>) => {
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log('onDragOver');
+    setOnDragOver(true);
   };
 
-  const handleDragLeave = () => {
-    console.log('onDragLeave');
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setOnDragOver(false);
   };
 
-  const handleDrop = () => {
-    console.log('onDrop', value);
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setOnDragOver(false);
   };
 
   return (
@@ -39,7 +42,10 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
       onDrop={handleDrop}
       className={classNames(
         '!text-black relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 w-full !p-4 3xl:p-![18px] border-4 ',
-        { 'border-blue-500 border-dotted': isDragging }
+        {
+          'border-blue-500 border-dotted': isDragging,
+          'border-green-500 border-dotted': isDragging && onDragOver,
+        }
       )}
     >
       {/* Task Header */}
