@@ -1,12 +1,15 @@
 import { create, StateCreator } from 'zustand';
-import { Task, TaskStatus } from '../../interfaces';
 import { devtools } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
+
+import { Task, TaskStatus } from '../../interfaces';
 
 interface TaskState {
   tasks: Record<string, Task>; // {[key: string]: Task }
   draggingTaskId?: string;
 
   getTaskByStatus: (status: TaskStatus) => Task[];
+  addTask: (title: string, status: TaskStatus) => void;
 
   setDraggingTaskId: (taskId: string) => void;
   removeDraggingTaskId: () => void;
@@ -36,11 +39,26 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
     },
   },
 
-  getTaskByStatus: (status: TaskStatus) => {
+  getTaskByStatus: (status) => {
     return Object.values(get().tasks).filter((task) => task.status === status);
   },
 
-  setDraggingTaskId: (taskId: string) => {
+  addTask(title, status) {
+    const newTask: Task = { id: uuidv4(), title, status };
+
+    set(
+      (status) => ({
+        tasks: {
+          ...status.tasks,
+          [newTask.id]: newTask,
+        },
+      }),
+      false,
+      'addTask'
+    );
+  },
+
+  setDraggingTaskId: (taskId) => {
     set({ draggingTaskId: taskId }, false, 'setDraggingTaskId');
   },
 
@@ -48,7 +66,7 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
     set({ draggingTaskId: undefined }, false, 'removeDraggingTaskId');
   },
 
-  changeTaskStatus(taskId: string, status: TaskStatus) {
+  changeTaskStatus(taskId, status) {
     const task = get().tasks[taskId];
     task.status = status;
 
@@ -64,7 +82,7 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
     );
   },
 
-  onTaskDrop(status: TaskStatus) {
+  onTaskDrop(status) {
     const taskId = get().draggingTaskId;
     if (!taskId) return;
 
