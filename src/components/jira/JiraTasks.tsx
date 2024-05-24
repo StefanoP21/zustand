@@ -2,6 +2,7 @@ import { DragEvent, useState } from 'react';
 import { IoAddOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 
 import classNames from 'classnames';
+import Swal from 'sweetalert2';
 
 import { Task, TaskStatus } from '../../interfaces';
 import { SingleTask } from './SingleTask';
@@ -10,18 +11,35 @@ import { useTaskStore } from '../../stores';
 interface Props {
   title: string;
   tasks: Task[];
-  value: TaskStatus;
+  status: TaskStatus;
 }
 
-export const JiraTasks = ({ title, value, tasks }: Props) => {
+export const JiraTasks = ({ title, status, tasks }: Props) => {
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
   const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
   const addTask = useTaskStore((state) => state.addTask);
 
   const [onDragOver, setOnDragOver] = useState(false);
 
-  const handleAddTask = (title: string, value: TaskStatus) => {
-    addTask(title, value);
+  const handleAddTask = async () => {
+    const { isConfirmed, value } = await Swal.fire({
+      title: 'Nueva Tarea',
+      input: 'text',
+      inputLabel: 'Nombre de la tarea',
+      inputPlaceholder: 'Escribe el nombre de la tarea',
+      showCancelButton: true,
+      confirmButtonText: 'Crear',
+      cancelButtonText: 'Cancelar',
+      inputValidator(value) {
+        if (!value) {
+          return 'Debes ingresar un nombre para la tarea';
+        }
+      },
+    });
+
+    if (!isConfirmed) return;
+
+    addTask(value, status);
   };
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
@@ -37,7 +55,7 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setOnDragOver(false);
-    onTaskDrop(value);
+    onTaskDrop(status);
   };
 
   return (
@@ -65,7 +83,7 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
           <h4 className="ml-4 text-xl font-bold text-navy-700">{title}</h4>
         </div>
 
-        <button onClick={() => handleAddTask('New Title', value)}>
+        <button onClick={() => handleAddTask()}>
           <IoAddOutline />
         </button>
       </div>
