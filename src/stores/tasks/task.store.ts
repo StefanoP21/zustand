@@ -1,6 +1,8 @@
 import { create, StateCreator } from 'zustand';
 import { devtools } from 'zustand/middleware';
+
 import { v4 as uuidv4 } from 'uuid';
+import { produce } from 'immer';
 
 import { Task, TaskStatus } from '../../interfaces';
 
@@ -44,18 +46,26 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
   },
 
   addTask(title, status) {
-    const newTask: Task = { id: uuidv4(), title, status };
+    const newTask: Task = { id: uuidv4(), title, status: status };
 
     set(
-      (status) => ({
-        tasks: {
-          ...status.tasks,
-          [newTask.id]: newTask,
-        },
+      produce((state: TaskState) => {
+        state.tasks[newTask.id] = newTask;
       }),
       false,
       'addTask'
     );
+
+    // set(
+    //   (state) => ({
+    //     tasks: {
+    //       ...state.tasks,
+    //       [newTask.id]: newTask,
+    //     },
+    //   }),
+    //   false,
+    //   'addTask'
+    // );
   },
 
   setDraggingTaskId: (taskId) => {
@@ -68,18 +78,27 @@ const storeApi: StateCreator<TaskState, [['zustand/devtools', never]]> = (
 
   changeTaskStatus(taskId, status) {
     const task = get().tasks[taskId];
+    console.log(task);
     task.status = status;
 
     set(
-      (state) => ({
-        tasks: {
-          ...state.tasks,
-          [taskId]: task,
-        },
+      produce((state: TaskState) => {
+        state.tasks[taskId] = task;
       }),
       false,
       'changeTaskStatus'
     );
+
+    // set(
+    //   (state) => ({
+    //     tasks: {
+    //       ...state.tasks,
+    //       [taskId]: task,
+    //     },
+    //   }),
+    //   false,
+    //   'changeTaskStatus'
+    // );
   },
 
   onTaskDrop(status) {
