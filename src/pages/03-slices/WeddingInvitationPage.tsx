@@ -13,6 +13,7 @@ export const WeddingInvitationPage = () => {
   const eventDate = useWeddingBoundStore((state) => state.eventDate);
   const eventYYYYMMDD = useWeddingBoundStore((state) => state.eventYYYYMMDD);
   const eventHHMM = useWeddingBoundStore((state) => state.eventHHMM);
+  const setEventDate = useWeddingBoundStore((state) => state.setEventDate);
 
   const handleGuestInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (+e.target.value >= 0) {
@@ -88,6 +89,7 @@ export const WeddingInvitationPage = () => {
                     name="eventDate"
                     id="eventDate"
                     value={eventYYYYMMDD()}
+                    onChange={(e) => setEventDate(e.target.value)}
                   />
                 </div>
               </div>

@@ -5,6 +5,8 @@ export interface DateSlice {
 
   eventYYYYMMDD: () => string;
   eventHHMM: () => string;
+
+  setEventDate: (parcialDate: string) => void;
 }
 
 export const CreateDateSlice: StateCreator<
@@ -23,4 +25,22 @@ export const CreateDateSlice: StateCreator<
 
     return `${hours}:${minutes}`;
   },
+
+  setEventDate: (parcialDate) =>
+    set(
+      (state) => {
+        const date = new Date(parcialDate);
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate() + 1;
+
+        const newDate = new Date(state.eventDate);
+        newDate.setFullYear(year, month, day);
+
+        return { eventDate: newDate };
+      },
+      false,
+      'setEventDate'
+    ),
 });
