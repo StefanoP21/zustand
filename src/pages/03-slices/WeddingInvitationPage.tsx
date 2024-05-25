@@ -15,6 +15,9 @@ export const WeddingInvitationPage = () => {
   const setEventDate = useWeddingBoundStore((state) => state.setEventDate);
   const setEventTime = useWeddingBoundStore((state) => state.setEventTime);
 
+  const isConfirmed = useWeddingBoundStore((state) => state.isConfirmed);
+  const setIsConfirmed = useWeddingBoundStore((state) => state.setIsConfirmed);
+
   const handleGuestInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (+e.target.value >= 0) {
       setGuestCount(+e.target.value);
@@ -120,6 +123,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton1"
                     className="h-5 w-5"
+                    checked={isConfirmed}
+                    onChange={() => setIsConfirmed(true)}
                   />
                   <label className="pl-3 text-base font-medium text-[#07074D]">
                     Si
@@ -131,6 +136,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton2"
                     className="h-5 w-5"
+                    checked={!isConfirmed}
+                    onChange={() => setIsConfirmed(false)}
                   />
                   <label className="pl-3 text-base font-medium text-[#07074D]">
                     No
