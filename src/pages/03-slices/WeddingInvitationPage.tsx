@@ -10,10 +10,10 @@ export const WeddingInvitationPage = () => {
   const guestCount = useWeddingBoundStore((state) => state.guestCount);
   const setGuestCount = useWeddingBoundStore((state) => state.setGuestCount);
 
-  const eventDate = useWeddingBoundStore((state) => state.eventDate);
-  const eventYYYYMMDD = useWeddingBoundStore((state) => state.eventYYYYMMDD);
-  const eventHHMM = useWeddingBoundStore((state) => state.eventHHMM);
+  const eventYYYYMMDD = useWeddingBoundStore((state) => state.eventYYYYMMDD());
+  const eventHHMM = useWeddingBoundStore((state) => state.eventHHMM());
   const setEventDate = useWeddingBoundStore((state) => state.setEventDate);
+  const setEventTime = useWeddingBoundStore((state) => state.setEventTime);
 
   const handleGuestInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (+e.target.value >= 0) {
@@ -88,7 +88,7 @@ export const WeddingInvitationPage = () => {
                     type="date"
                     name="eventDate"
                     id="eventDate"
-                    value={eventYYYYMMDD()}
+                    value={eventYYYYMMDD}
                     onChange={(e) => setEventDate(e.target.value)}
                   />
                 </div>
@@ -102,7 +102,8 @@ export const WeddingInvitationPage = () => {
                     type="time"
                     name="eventTime"
                     id="eventTime"
-                    value={eventHHMM()}
+                    value={eventHHMM}
+                    onChange={(e) => setEventTime(e.target.value)}
                   />
                 </div>
               </div>
