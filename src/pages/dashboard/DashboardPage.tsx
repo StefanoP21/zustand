@@ -57,10 +57,10 @@ export const Dashboard = () => {
           <p>{userName}</p>
         </WhiteCard>
 
-        <WhiteCard centered className="col-span-3">
+        {/*         <WhiteCard centered className="col-span-3">
           <IoInformationOutline size={50} className="text-indigo-600" />
           <RequestInfo />
-        </WhiteCard>
+        </WhiteCard> */}
       </div>
     </>
   );
