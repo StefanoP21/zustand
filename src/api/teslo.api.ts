@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const tesloApi = axios.create({
-  baseURL: import.meta.env.VIE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
 });

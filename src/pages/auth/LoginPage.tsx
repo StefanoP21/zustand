@@ -1,18 +1,22 @@
 import { FormEvent } from 'react';
+import { useAuthStore } from '../../stores';
 
 export const LoginPage = () => {
+  const loginUser = useAuthStore((state) => state.loginUser);
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // const { username, password, remember } = event.target as HTMLFormElement;
-    const { username, password, remember } =
+    // const { email, password, remember } = event.target as HTMLFormElement;
+    const { email, password, remember } =
       event.target as typeof event.target & {
-        username: { value: string };
+        email: { value: string };
         password: { value: string };
         remember: { checked: boolean };
       };
-    console.log(username.value, password.value, remember.checked);
 
-    username.value = '';
+    loginUser(email.value, password.value);
+
+    email.value = '';
     password.value = '';
     remember.checked = false;
   };
@@ -23,8 +27,8 @@ export const LoginPage = () => {
 
       <form onSubmit={onSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-600">Username</label>
-          <input type="text" name="username" autoComplete="off" />
+          <label className="block text-gray-600">Email</label>
+          <input type="text" name="email" autoComplete="off" />
         </div>
 
         <div className="mb-4">
