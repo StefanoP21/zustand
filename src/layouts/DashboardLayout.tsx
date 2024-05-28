@@ -1,5 +1,5 @@
-import { SideMenu } from '../components';
 import { Navigate, Outlet } from 'react-router-dom';
+import { SideMenu } from '../components';
 import { useAuthStore } from '../stores';
 
 export const DashboardLayout = () => {
