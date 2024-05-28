@@ -1,10 +1,12 @@
 import { FormEvent } from 'react';
 import { useAuthStore } from '../../stores';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
   const loginUser = useAuthStore((state) => state.loginUser);
+  const navigate = useNavigate();
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // const { email, password, remember } = event.target as HTMLFormElement;
     const { email, password, remember } =
@@ -14,11 +16,13 @@ export const LoginPage = () => {
         remember: { checked: boolean };
       };
 
-    loginUser(email.value, password.value);
+    try {
+      await loginUser(email.value, password.value);
 
-    email.value = '';
-    password.value = '';
-    remember.checked = false;
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

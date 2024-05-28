@@ -9,12 +9,13 @@ export interface AuthState {
   user?: User;
 
   loginUser: (email: string, password: string) => Promise<void>;
+  checkAuthStatus: () => Promise<void>;
 }
 
 const storeApi: StateCreator<AuthState, [['zustand/devtools', never]]> = (
   set
 ) => ({
-  status: 'authorized',
+  status: 'pending',
   token: undefined,
   user: undefined,
 
@@ -29,6 +30,24 @@ const storeApi: StateCreator<AuthState, [['zustand/devtools', never]]> = (
         false,
         'loginUser'
       );
+
+      throw error;
+    }
+  },
+
+  checkAuthStatus: async () => {
+    try {
+      const { token, ...user } = await AuthService.checkStatus();
+
+      set({ status: 'authorized', token, user }, false, 'checkAuthStatus');
+    } catch (error) {
+      set(
+        { status: 'unauthorized', token: undefined, user: undefined },
+        false,
+        'checkAuthStatus'
+      );
+
+      throw error;
     }
   },
 });
